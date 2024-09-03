@@ -1659,18 +1659,24 @@ def chat(request: ChatRequest):
     assistant_response = ""
     chat_session.messages.append(UserMessage(content=request.message))
     
-    for chunk in client.chat.stream(
-        model=chat_session.model,
-        temperature=chat_session.temperature,
-        messages=chat_session.messages
-    ):
-        response = chunk.data.choices[0].delta.content
-        if response:
-            assistant_response += response
-    if assistant_response:
-        chat_session.messages.append(AssistantMessage(content=assistant_response))
+    try:
+        for chunk in client.chat.stream(
+            model=chat_session.model,
+            temperature=chat_session.temperature,
+            messages=chat_session.messages
+        ):
+            if hasattr(chunk.data.choices[0].delta, 'content'):
+                response = chunk.data.choices[0].delta.content
+                if response:
+                    assistant_response += response
+        if assistant_response:
+            chat_session.messages.append(AssistantMessage(content=assistant_response))
     
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error during chat streaming: {e}")
+
     return {"response": assistant_response}
+
 
 @app.post("/get_json")
 def get_json(request: ChatRequest):
