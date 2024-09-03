@@ -12,7 +12,7 @@ from mistralai.models import AssistantMessage, SystemMessage, UserMessage
 app = FastAPI()
 
 # Initialize Mistral client
-api_key = "WOsXWjeJ6HQjxA2zflN5FlAJs8vw9Iav"
+api_key = "7Vqu7BhtnmLXupGMpgE5Ow84uu9AM8AO"
 # api_key = os.getenv("MISTRAL_API_KEY")
 if not api_key:
     raise ValueError("MISTRAL_API_KEY environment variable not set.")
