@@ -1677,7 +1677,6 @@ def chat(request: ChatRequest):
 
     return {"response": assistant_response}
 
-
 @app.post("/get_json")
 def get_json(request: ChatRequest):
     session_id = request.session_id
